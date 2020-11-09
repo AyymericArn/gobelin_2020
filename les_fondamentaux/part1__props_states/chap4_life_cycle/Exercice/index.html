@@ -14,8 +14,6 @@
 		<script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
 		<script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js" integrity="sha512-kp7YHLxuJDJcOzStgd6vtpxr4ZU9kjn77e6dBsivSz+pUuAuMlE2UTdKB7jjsWT84qbS8kdCWHPETnP/ctrFsA==" crossorigin="anonymous"></script>
-		<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/JSXTransformer.js"></script> -->
-		<!-- <script type="application/javascript"> -->
 		<script type="text/babel">
 			class App extends React.Component {
 				constructor(props) {
@@ -28,9 +26,10 @@
 				}
 
 				componentDidUpdate (prevProps, prevState) {
+					
 					if (this.state.rows.length < 10) 
 					{setTimeout(() => {
-						this.setState({ rows: [...this.state.rows, <Bar lineLength={10} />] })
+						this.setState({ rows: [...prevState.rows, <Bar lineLength={10} />] })
 					}, 500);}
 				}
 			
@@ -56,7 +55,7 @@
 
 				componentDidUpdate(prevProps, prevState) {
 					if (this.state.stars.length < this.props.lineLength) setTimeout(() => {
-						this.setState({ stars: this.state.stars + '*' })
+						this.setState({ stars: prevState.stars + '*' })
 					}, 500);
 				}
 
