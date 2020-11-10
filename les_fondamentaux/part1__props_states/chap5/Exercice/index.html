@@ -22,13 +22,14 @@
 				constructor(props) {
 					super(props)
 				}
-
 			
 				render () {
 					return (
 						<div>
-							<Counter inc={1}/>
+							<Counter/>
 							<Counter inc={2}/>
+							<Counter title="cyclic" isCyclic={true}/>
+							<Counter title="binary" isBinary={true}/>
 						</div>
 					)
 				}
@@ -44,15 +45,34 @@
 					this.start = this.start.bind(this)
 					this.stop = this.stop.bind(this)
 					this.reset = this.reset.bind(this)
+					this.incrementBinary = this.incrementBinary.bind(this)
+					this.incrementDecimal = this.incrementDecimal.bind(this)
+				}
+
+				static defaultProps = {
+					inc: 1
+				}
+
+				incrementBinary () {
+					let decCount = parseInt(this.state.count, 2)
+					decCount += this.props.inc
+					const binCount = Number(decCount).toString(2)
+
+					this.setState({ count: binCount })
+				}
+
+				incrementDecimal () {
+					this.setState({ count: this.state.count + this.props.inc })
 				}
 
 				start () {
+					this.setState({ isRunning: true })
+
 					this.interval = setInterval(() => {
-						this.setState({
-							count: this.state.count + this.props.inc,
-							isRunning: true
-						})
-						if (this.state.count === 20) this.stop()
+						if (this.props.isBinary) this.incrementBinary()
+						else this.incrementDecimal()
+
+						if (this.state.count === 20) this.props.isCyclic ? this.reset() : this.stop()
 					}, TIME);
 				}
 
@@ -69,8 +89,10 @@
 
 				render () {
 					const { isRunning, count } = this.state
+					const { title } = this.props
 					return (
 						<div>
+							{title && <span>{title}</span>}
 							<button disabled={isRunning} onClick={this.start}>start (+{this.props.inc})</button>
 							<button disabled={!isRunning} onClick={this.stop}>stop</button>
 							{count && <button onClick={this.reset}>reset</button>}
