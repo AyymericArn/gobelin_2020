@@ -47,11 +47,13 @@
 				}
 
 				start () {
+					this.setState({ isRunning: true })
+					
 					this.interval = setInterval(() => {
 						this.setState({
 							count: this.state.count + this.props.inc,
-							isRunning: true
 						})
+
 						if (this.state.count === 20) this.stop()
 					}, TIME);
 				}
