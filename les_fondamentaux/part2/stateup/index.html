@@ -15,18 +15,22 @@
 		<script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js" integrity="sha512-kp7YHLxuJDJcOzStgd6vtpxr4ZU9kjn77e6dBsivSz+pUuAuMlE2UTdKB7jjsWT84qbS8kdCWHPETnP/ctrFsA==" crossorigin="anonymous"></script>
 		<script type="text/babel">
-			
-			const TIME = 1000
 
 			class App extends React.Component {
 				constructor(props) {
 					super(props)
 
 					this.state = {
-						number: 0
+						number: 0,
+						base: null
 					}
 
+					this.handleSelect = this.handleSelect.bind(this)
 					this.handleChange = this.handleChange.bind(this)
+				}
+
+				handleSelect (e) {
+					this.setState({ base: parseInt(e.target.value) })
 				}
 
 				handleChange (e) {
@@ -36,8 +40,14 @@
 				render () {
 					return (
 						<div>
-							<BaseNumberInput onChangeBase={(e, base) => this.handleChange(e, base)} number={this.state.number} base="decimal" title="décimal"/>
-							<BaseNumberInput onChangeBase={(e, base) => this.handleChange(e, base)} number={this.state.number} base="binary" title="binaire"/>
+							<BaseNumberInput onChangeBase={(e) => this.handleChange(e)} number={this.state.number} base={10}/>
+								<select onChange={this.handleSelect}>
+									<option value={null}>Aucune base</option>
+									<option value={2}>2</option>
+									<option value={3}>3</option>
+									<option value={7}>7</option>
+								</select>
+							{this.state.base && <BaseNumberInput onChangeBase={(e) => this.handleChange(e)} number={this.state.number} base={this.state.base}/>}
 						</div>
 					)
 				}
@@ -51,15 +61,11 @@
 				}
 
 				setNumber(num) {
-					if (this.props.base === 'binary') {
-						return parseInt(num, 2)
-					}
-
-					return num
+					return parseInt(num, this.props.base) || 0
 				}
 
-				displayNumber() {
-					return this.props.base === 'binary' ? parseInt(this.props.number, 10).toString(2) : this.props.number
+				displayNumber(number, base) {
+					return parseInt(number, 10).toString(base)
 				}
 				
 				render () {
@@ -70,7 +76,7 @@
 							<input 
 								onChange={(e) => onChangeBase(this.setNumber(e.target.value))} 
 								type="text" 
-								value={ this.displayNumber() }/>
+								value={ this.displayNumber(number, base) }/>
 						</div>
 					)
 				}
