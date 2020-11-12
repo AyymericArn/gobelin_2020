@@ -29,11 +29,8 @@
 					this.handleChange = this.handleChange.bind(this)
 				}
 
-				handleChange (e, base) {
-					if (base === 'binary')
-						this.setState({ number: parseInt(e, 2) })
-					else
-						this.setState({ number: e })
+				handleChange (e) {
+					this.setState({ number: e })
 				}
 			
 				render () {
@@ -49,6 +46,20 @@
 			class BaseNumberInput extends React.Component {
 				constructor(props) {
 					super(props)
+					this.setNumber = this.setNumber.bind(this)
+					this.displayNumber = this.displayNumber.bind(this)
+				}
+
+				setNumber(num) {
+					if (this.props.base === 'binary') {
+						return parseInt(num, 2)
+					}
+
+					return num
+				}
+
+				displayNumber() {
+					return this.props.base === 'binary' ? parseInt(this.props.number, 10).toString(2) : this.props.number
 				}
 				
 				render () {
@@ -56,7 +67,10 @@
 					return (
 						<div>
 							<h4>{title}</h4>
-							<input onChange={(e) => onChangeBase(e.target.value, base)} type="text" value={ base === 'binary' ? Number(number).toString(2) : number }/>
+							<input 
+								onChange={(e) => onChangeBase(this.setNumber(e.target.value))} 
+								type="text" 
+								value={ this.displayNumber() }/>
 						</div>
 					)
 				}
