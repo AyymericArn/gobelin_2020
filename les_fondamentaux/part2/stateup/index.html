@@ -30,7 +30,7 @@
 				}
 
 				handleSelect (e) {
-					this.setState({ base: parseInt(e.target.value) })
+					this.setState({ base: parseInt(e.target.value) || null })
 				}
 
 				handleChange (e) {
@@ -41,6 +41,7 @@
 					return (
 						<div>
 							<BaseNumberInput onChangeBase={(e) => this.handleChange(e)} number={this.state.number} base={10}/>
+								<p>sélectionnez une base</p>
 								<select onChange={this.handleSelect}>
 									<option value={null}>Aucune base</option>
 									<option value={2}>2</option>
@@ -69,10 +70,10 @@
 				}
 				
 				render () {
-					const { title, base, number, onChangeBase } = this.props
+					const { base, number, onChangeBase } = this.props
 					return (
 						<div>
-							<h4>{title}</h4>
+							<h4>base {base}</h4>
 							<input 
 								onChange={(e) => onChangeBase(this.setNumber(e.target.value))} 
 								type="text" 
